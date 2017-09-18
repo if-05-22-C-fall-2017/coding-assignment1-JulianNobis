@@ -1,5 +1,5 @@
 /*
- * This might not be an elegant solution because I just copied the code for another test example with a negative number (if-else blocks)
+ * This might not be the most elegant solution out there
  */
 package gcd_nobis.julian;
 
@@ -8,41 +8,54 @@ package gcd_nobis.julian;
  * @author Julian Nobis
  */
 public class Gcd_nobisJulian {
+    static int number1 = 1989, number2 = 867; // exact same numbers like in school
+    static int number3 = -3, number4 = 111; // should get a message because number3 is negative
     public static void main(String[] args) {
-        int number1 = 1989, number2 = 867; // exact same numbers like in school
-        int number3 = -3, number4 = 111; 
         System.out.println("This is the solution of Julian Nobis\n");
-        
-        // method 1: eucledian algorithm
+        eucledianStructure();
+        primeFactorsStructure();
+    } 
+    // method 1: eucledian algorithm
+    public static void eucledianStructure(){
         int resultEucledian = gcdEucledian(number1, number2);
-        if (resultEucledian == -1){ // invalid number
-            System.out.println("An error occured, sorry! No negative numbers allowed!");
-        }
-        else{
-            System.out.println("EUCLEDIAN ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + resultEucledian);
-        }
-        resultEucledian = gcdEucledian(number3, number4); // negative example
-        if (resultEucledian == -1){ // invalid number
-            System.out.println("An error occured, sorry! No negative numbers allowed!");
-        }
-        else{
-            System.out.println("EUCLEDIAN ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + resultEucledian);
-        }
-        
-        // method 2: prime-factors algorithm
+        output(1, resultEucledian);
+    }
+    // method 2: prime-factors algorithm
+    public static void primeFactorsStructure(){
         int resultPrimeFactors = gcdPrimeFactors(number1, number2);
-        if (resultPrimeFactors == -1){ // invalid number
-            System.out.println("An error occured, sorry! No negative numbers allowed!");
+        output(2, resultPrimeFactors);
+    }
+    
+    public static void output(int number, int result){
+        if (number == 1){ // eucledian algorithm
+            if (result == -1){ // invalid number
+                System.out.println("No negative numbers allowed! Sorry!");
+            }
+            else{
+                System.out.println("EUCLEDIAN ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + result);
+            }
+            result = gcdEucledian(number3, number4); // negative example
+            if (result == -1){ // invalid number
+                System.out.println("No negative numbers allowed! Sorry!");
+            }
+            else{
+                System.out.println("EUCLEDIAN ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + result);
+            }
         }
-        else{
-            System.out.println("\nPRIME-FACTORS ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + resultPrimeFactors);
-        }
-        resultPrimeFactors = gcdPrimeFactors(number3, number4); // negative example
-        if (resultPrimeFactors == -1){ // invalid number
-            System.out.println("An error occured, sorry! No negative numbers allowed!");
-        }
-        else{
-            System.out.println("PRIME-FACTORS ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + resultPrimeFactors);
+        else{ // prime-factors algorithm
+            if (result == -1){ // invalid number
+                System.out.println("No negative numbers allowed! Sorry!");
+            }
+            else{
+                System.out.println("\nPRIME-FACTORS ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + result);
+            }
+            result = gcdPrimeFactors(number3, number4); // negative example
+            if (result == -1){ // invalid number
+                System.out.println("No negative numbers allowed! Sorry!");
+            }
+            else{
+                System.out.println("PRIME-FACTORS ALGORITHM:\ngcd of " + number1 + " and " + number2 + " is: " + result);
+            }
         }
     }
     
@@ -66,26 +79,27 @@ public class Gcd_nobisJulian {
             remainders_B[i_B] = b / temp_B--;
             b /= remainders_B[i_B++];
         }   
-        // multiply common remainders of BOTH A and B
+        
+        int result = multiplyRemainders(remainders_A, remainders_B);
+        return result; 
+    }
+    // multiply common remainders of BOTH arrayA and arrayB
+    public static int multiplyRemainders(int[]array_A, int[]array_B){
         int result = 1;
-        for (int i = 0; i < remainders_A.length && remainders_A[i] != 0; i++){ // array is partially filled with 0s, therefore check for 0
-            for (int n = 0; n < remainders_B.length && remainders_B[n] != 0; n++){ // array is partially filled with 0s, therefore check for 0
-                if (remainders_A[i++] == remainders_B[n++]){
-                    result *= remainders_A[i]; // "primfaktorenzerlegung multiplizieren"
+        for (int i = 0; i < array_A.length && array_A[i] != 0; i++){ // array is partially filled with 0s, therefore check for 0
+            for (int n = 0; n < array_B.length && array_B[n] != 0; n++){ // array is partially filled with 0s, therefore check for 0
+                if (array_A[i] == array_B[n++]){
+                    result *= array_A[i++]; // "primfaktorenzerlegung multiplizieren"
                 }
             }
         }
-       return result; 
+        return result;
     }
     
     public static int gcdEucledian(int a, int b){
-       if (a <= 0 || b < 0) return -1; // not valid
-       while (b != 0){ // we know that the gcd(a, 0) = a
-           int c = a;
-           a = b;
-           b = c % b;
-       }
-       return a;
+       if (a == 0 || b == 0) return a+b;
+       if (a < 0 || b < 0) return -1;
+       return gcdEucledian(b, a % b);
     }
     
 }
