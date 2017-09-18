@@ -61,30 +61,35 @@ public class Gcd_nobisJulian {
     
     public static int gcdPrimeFactors(int a, int b){
         if (a <= 0|| b <= 0) return -1; // not valid
-        // section for 'a' variable
-        int[] remainders_A = new int[10];
-        int temp_A = a-1;
-        int i_A = 0;
-        while (a != 1){ // find out remainders for A
-            while ((a % temp_A) != 0) temp_A--;
-            remainders_A[i_A] = a / temp_A--;
-            a /= remainders_A[i_A++];
-        }
-        // section for 'b' variable
-        int[] remainders_B = new int[10];
-        int temp_B = b-1;
-        int i_B = 0;
-        while (b != 1){ // find out remainders for B
-            while ((b % temp_B) != 0) temp_B--;
-            remainders_B[i_B] = b / temp_B--;
-            b /= remainders_B[i_B++];
-        }   
-        
-        int result = multiplyRemainders(remainders_A, remainders_B);
+        int[] primeFactors_A = new int[10], primeFactors_B = new int[10];
+        sectionA(a, primeFactors_A);
+        sectionB(b, primeFactors_B);
+        int result = multiplyPrimeFactors(primeFactors_A, primeFactors_B);
         return result; 
     }
-    // multiply common remainders of BOTH arrayA and arrayB
-    public static int multiplyRemainders(int[]array_A, int[]array_B){
+    
+    private static void sectionA(int a, int[] primefac_A){
+        int temp_A = a-1;
+        int i_A = 0;
+        while (a != 1){ // find out primeFactors for A
+            while ((a % temp_A) != 0) temp_A--;
+            primefac_A[i_A] = a / temp_A--;
+            a /= primefac_A[i_A++];
+        }
+    }
+    
+    private static void sectionB(int b, int[] primefac_B){ 
+        int temp_B = b-1;
+        int i_B = 0;
+        while (b != 1){ // find out primeFactors for B
+            while ((b % temp_B) != 0) temp_B--;
+            primefac_B[i_B] = b / temp_B--;
+            b /= primefac_B[i_B++];
+        }   
+    }
+    
+    // multiply common primeFactors of BOTH arrayA and arrayB
+    public static int multiplyPrimeFactors(int[]array_A, int[]array_B){
         int result = 1;
         for (int i = 0; i < array_A.length && array_A[i] != 0; i++){ // array is partially filled with 0s, therefore check for 0
             for (int n = 0; n < array_B.length && array_B[n] != 0; n++){ // array is partially filled with 0s, therefore check for 0
